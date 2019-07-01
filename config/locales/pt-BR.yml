@@ -1,0 +1,6 @@
+# Brazillian portuguese strings go here for Rails i18n
+pt-BR:
+  issue_links: "Botões de Tarefa"
+  link_name: "Nome do link"
+  issue_from: "Tipo de Tarefa de origem"
+  issue_to: "Tipo de Tarefa de destino"

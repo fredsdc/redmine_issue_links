@@ -1,0 +1,6 @@
+# English strings go here for Rails i18n
+en:
+  issue_links: "Issue Links"
+  link_name: "Link name"
+  issue_from: "Tracker from"
+  issue_to: "Tracker to"

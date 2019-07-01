@@ -1,0 +1,19 @@
+<%
+# This file is a part of Redmine Issue Link
+#
+# redmine_issue_links is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# redmine_issue_links is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with redmine_issue_links.  If not, see <http://www.gnu.org/licenses/>.
+-%>
+<script>
+$('<% IssueLink.where(project_id: issue.project_id, tracker_id: @issue.tracker, child_tracker_id: @issue.project.trackers).each do |link| %><%= link_to link.name, new_project_issue_path(link.project_id, :issue => {:tracker_id => link.child_tracker_id, :parent_issue_id => @issue}), :class => 'icon icon-add'%> <% end %>').prependTo("#content>.contextual");
+</script>

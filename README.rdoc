@@ -1,0 +1,13 @@
+= Redmine Issue Links plugin
+
+This plugin adds a link left of the other issue links (Edit, Copy), that creates a subtask of a specific tracker.
+
+It adds shortcuts for when your users don't know how Redmine works.
+
+== How to use
+
+Members with permission to edit the project would find in settings a new tab "Issue Links".
+
+Fill a name for the link, and the trackers (parent and child) that the plugin would use.
+
+Save.
