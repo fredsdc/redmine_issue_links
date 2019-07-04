@@ -4,3 +4,4 @@ pt-BR:
   link_name: "Nome do link"
   issue_from: "Tipo de Tarefa de origem"
   issue_to: "Tipo de Tarefa de destino"
+  copy_cfs: "Copiar campos"

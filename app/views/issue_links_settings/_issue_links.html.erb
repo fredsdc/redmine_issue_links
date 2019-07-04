@@ -15,5 +15,5 @@
 # along with redmine_issue_links.  If not, see <http://www.gnu.org/licenses/>.
 -%>
 <script>
-$('<% IssueLink.where(project_id: issue.project_id, tracker_id: @issue.tracker, child_tracker_id: @issue.project.trackers).each do |link| %><%= link_to link.name, new_project_issue_path(link.project_id, :issue => {:tracker_id => link.child_tracker_id, :parent_issue_id => @issue}), :class => 'icon icon-add'%> <% end %>').prependTo("#content>.contextual");
+$('<%IssueLink.where(project_id: issue.project_id, tracker_id: @issue.tracker, child_tracker_id: @issue.project.trackers).each do |link| %><%= link_to link.name, new_project_issue_path(link.project_id, :issue => {:tracker_id => link.child_tracker_id, :parent_issue_id => @issue, :custom_field_values => link.cfs.split(",").map{|cf| [cf.to_i, @issue.custom_field_value(cf)]}.to_h}), :class => 'icon icon-add'%> <% end %>').prependTo("#content>.contextual");
 </script>

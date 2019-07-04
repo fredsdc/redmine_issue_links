@@ -17,3 +17,4 @@
 # See: http://guides.rubyonrails.org/routing.html
 
 match 'projects/:id/issue_links', :controller => 'issue_links', :via => [:post], :action => 'issuelinksdata'
+match 'projects/:id/issue_links', :controller => 'issue_links', :via => [:get], :action => 'edit'

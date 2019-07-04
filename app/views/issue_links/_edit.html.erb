@@ -1,0 +1,18 @@
+<h3 class="title"><%= l(:copy_cfs) %></h3>
+
+<%= form_for :issue_links, :as => :issue_links, :url => {:controller=>'issue_links', :action => 'issuelinksdata', :id => @project}, :remote => true, :method => :post do |f| %>
+  <fieldset class="box tabular"><legend><%= l(:label_custom_field_plural) %></legend>
+    <% @common_custom_fields.each do |cf| %>
+      <label class="floating">
+      <%= check_box_tag "cf", cf[0], (@selected_common_fields.include? cf),
+          :disabled => nil, :id => nil %>
+      <%= cf[1] %>
+      </label>
+    <% end %>
+  </fieldset>
+
+  <p class="buttons">
+    <%= submit_tag l(:button_add), :name => nil, :onclick => "$(cfs_tag).val($('#dialog label input:checkbox:checked').map(function(){return this.value}).get().toString()); hideModal(this);", :type => 'button' %>
+    <%= submit_tag l(:button_cancel), :name => nil, :onclick => "hideModal(this);", :type => 'button' %>
+  </p>
+<% end %>

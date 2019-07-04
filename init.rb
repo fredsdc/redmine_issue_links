@@ -19,7 +19,7 @@ Redmine::Plugin.register :redmine_issue_links do
   name 'Redmine Issue Links plugin'
   author 'Frederico Camara'
   description 'This plugin configure custom links on the issue view to shortcut new subtasks'
-  version '0.0.1'
+  version '0.5.0'
   url 'http://github.com/fredsdc/redmine_issue_links'
 end
 

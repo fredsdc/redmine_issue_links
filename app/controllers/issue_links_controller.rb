@@ -26,14 +26,34 @@ class IssueLinksController < ApplicationController
     links_ids = IssueLink.where(project: @project).pluck(:id)
     issue_links_data.each do |i,v|
       link_id = links_ids.shift
+      cfs = (commoncustomfields(v["tracker_from"], v["tracker_to"], @project).map(&:first) &
+        v["cfs"].split(",").map(&:to_i)).join(",")
       if link_id.nil?
-        IssueLink.create(name: v["link_name"], project_id: @project.id, tracker_id: v["tracker_from"], child_project_id: @project.id, child_tracker_id: v["tracker_to"])
+        IssueLink.create(name: v["link_name"], project_id: @project.id, tracker_id: v["tracker_from"], child_project_id: @project.id, child_tracker_id: v["tracker_to"], cfs: cfs)
       else
-        IssueLink.update(IssueLink.find(link_id), name: v["link_name"], project_id: @project.id, tracker_id: v["tracker_from"], child_project_id: @project.id, child_tracker_id: v["tracker_to"])
+        IssueLink.update(IssueLink.find(link_id), name: v["link_name"], project_id: @project.id, tracker_id: v["tracker_from"], child_project_id: @project.id, child_tracker_id: v["tracker_to"], cfs: cfs)
       end
     end
     IssueLink.where(id: links_ids).destroy_all
     flash[:notice] = l(:notice_successful_update)
     redirect_to settings_project_path(@project, :tab => 'issue_links')
+  end
+
+  def edit
+    (render_403; return false) unless User.current.allowed_to?(:edit_project, @project)
+    @common_custom_fields = commoncustomfields(params[:tracker_from], params[:tracker_to], @project)
+    @selected_common_fields = CustomField.where(id: params[:cfs].split(",")).pluck(:id, :name)
+    render :partial => 'edit'
+  end
+
+private
+  def commoncustomfields(tracker_from, tracker_to, project)
+    if tracker_from && tracker_to
+      Tracker.find(tracker_from.to_i).custom_fields.pluck(:id, :name) &
+        Tracker.find(tracker_to.to_i).custom_fields.pluck(:id, :name) &
+        project.all_issue_custom_fields.pluck(:id, :name)
+    else
+      []
+    end
   end
 end

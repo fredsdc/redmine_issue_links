@@ -22,21 +22,37 @@
     <% if @project.trackers.include?(i.tracker) %>
       <div class="ui-sortable-handle sortable_link ui-sortable">
         <%= text_field_tag "link_name", "#{i.name}", {:style => "width: 200px"} %>
-        <%= select_tag "tracker_from", options_from_collection_for_select(@project.trackers.collect, "id", "name", i.tracker_id), {:onchange => "refresh_trackers(this);", :style => "width: 200px"} %>
-        <%= select_tag "tracker_to", options_from_collection_for_select(@project.trackers.collect, "id", "name", i.child_tracker_id), {:onchange => "refresh_trackers(this);", :style => "width: 200px"} %>
+        <%= text_field_tag "cfs", "#{i.cfs}", {:style => "width: 200px; display: none"} %>
+        <%= select_tag "tracker_from",
+          options_from_collection_for_select(@project.trackers.collect, "id", "name", i.tracker_id),
+          {:onchange => "refresh_trackers(this);", :style => "width: 200px"} %>
+        <%= select_tag "tracker_to",
+          options_from_collection_for_select(@project.trackers.collect, "id", "name", i.child_tracker_id),
+          {:onchange => "refresh_trackers(this);", :style => "width: 200px"} %>
+        <%= button_tag l(:copy_cfs), type: 'button', onclick: "send_cfs(this);" %>
         <img src="/images/delete.png" style="" onclick="remove_link_label(this);"/>
       </div>
     <% end %>
   <% end %>
   <div style="margin-left: 25px">
     <%= text_field_tag "link_name", "", {:style => "width: 200px"} %>
-    <%= select_tag "tracker_from", options_from_collection_for_select(@project.trackers.collect, "id", "name"), {:onchange => "refresh_trackers(this);", :style => "width: 200px"} %>
-    <%= select_tag "tracker_to", options_from_collection_for_select(@project.trackers.collect, "id", "name"), {:onchange => "refresh_trackers(this);", :style => "width: 200px"} %>
+    <%= text_field_tag "cfs", "", {:style => "width: 200px; display: none"} %>
+    <%= select_tag "tracker_from",
+      options_from_collection_for_select(@project.trackers.collect, "id", "name"),
+      {:onchange => "refresh_trackers(this);", :style => "width: 200px"} %>
+    <%= select_tag "tracker_to",
+      options_from_collection_for_select(@project.trackers.collect, "id", "name"),
+      {:onchange => "refresh_trackers(this);", :style => "width: 200px"} %>
+    <%= button_tag l(:copy_cfs), type: 'button', onclick: "send_cfs(this);" %>
     <img src="/images/add.png" style="" onclick="add_link_label(this);"/>
   </div>
 </div>
+<div id="dialog" style="display:none;">
+  <h3 class="title"><%= l(:copy_cfs) %></h3>
+</div>
 
-<%= form_for :issue_links, :url => {:controller=>'issue_links', :action => 'issuelinksdata', :id => @project}, :html => {:id => 'issuelinksdata-form', :method => :post} do |f| %>
+<%= form_for :issue_links, :url => {:controller=>'issue_links', :action => 'issuelinksdata', :id => @project},
+  :html => {:id => 'issuelinksdata-form', :method => :post} do |f| %>
 <%= hidden_field :issue_links_data, '', :id => 'issue_links_data', :name => 'issue_links_data' %>
 <p><%= submit_tag l(:button_save), :onclick => "issue_links_json_data();" %></p>
 <% end %>
@@ -50,14 +66,23 @@ $('.sortable_links').sortable({
   axis: 'y'
 });
 
+function send_cfs(button) {
+  cfs_tag = $(button).parent().children('#cfs');
+  dataset = {
+    tracker_from: $(button).parent().children('#tracker_from').val(),
+    tracker_to: $(button).parent().children('#tracker_to').val(),
+    cfs: $(cfs_tag).val()
+  };
+  htmldata = $.get('<%= url_for :controller => 'issue_links', :action => 'issuelinksdata', :id => @project %>', dataset).done(function(){$('#dialog').html(htmldata.responseText)});
+  showModal('dialog', '600px');
+}
+
 function add_link_label(label) {
   var old_label = $(label), new_label = $(label).parent().clone();
   new_label.children().first().val('').trigger('change');
+  new_label.children('#cfs').val('');
   old_label.attr('src','/images/delete.png').attr('onclick','remove_link_label(this);');
   old_label.parent().addClass('ui-sortable-handle sortable_link');
-  old_label.parent().sortable({
-    connectWith: '.sortable_links'
-  }).disableSelection();
   old_label.parent().css("margin-left", "0px");
   old_label.parent().parent().append(new_label);
 }
@@ -74,6 +99,7 @@ function issue_links_json_data() {
         'link_name': $(this).children('#link_name').val(),
         'tracker_from': $(this).children('#tracker_from').val(),
         'tracker_to': $(this).children('#tracker_to').val(),
+        'cfs': $(this).children('#cfs').val()
       }
     }
   });
