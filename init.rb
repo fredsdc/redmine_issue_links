@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with redmine_issue_links.  If not, see <http://www.gnu.org/licenses/>.
 
-require_dependency 'redmine_issue_links/hooks'
+require_dependency 'issue_links/hooks'
 
 Redmine::Plugin.register :redmine_issue_links do
   name 'Redmine Issue Links plugin'
@@ -23,8 +23,12 @@ Redmine::Plugin.register :redmine_issue_links do
   url 'http://github.com/fredsdc/redmine_issue_links'
 end
 
-Rails.application.config.to_prepare do
-  unless ProjectsHelper.include?(RedmineIssueLinks::ProjectsHelperPatch)
-    ProjectsHelper.send(:include, RedmineIssueLinks::ProjectsHelperPatch)
-  end
+Rails.configuration.to_prepare do
+  IssueLinks::ProjectsSettingsTabs.apply
 end
+
+# Rails.application.config.to_prepare do
+#   unless ProjectsHelper.include?(RedmineIssueLinks::ProjectsHelperPatch)
+#     ProjectsHelper.send(:include, RedmineIssueLinks::ProjectsHelperPatch)
+#   end
+# end

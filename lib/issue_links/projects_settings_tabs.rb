@@ -13,22 +13,14 @@
 # You should have received a copy of the GNU General Public License
 # along with redmine_issue_links.  If not, see <http://www.gnu.org/licenses/>.
 
-require_dependency 'projects_helper'
-
-module RedmineIssueLinks
-  module ProjectsHelperPatch
-    def self.included(base)
-      base.send(:include, InstanceMethods)
-      base.class_eval do
-        unloadable
-        alias_method_chain :project_settings_tabs, :issue_links
-      end
+module IssueLinks
+  module ProjectsSettingsTabs
+    def self.apply
+      ProjectsController.send :helper, IssueLinks::ProjectsSettingsTabs
     end
-  end
 
-  module InstanceMethods
-    def project_settings_tabs_with_issue_links
-      tabs = project_settings_tabs_without_issue_links
+    def project_settings_tabs
+      tabs = super
       tabs << {
         :name => 'issue_links',
         :action => :issue_links,
@@ -38,5 +30,3 @@ module RedmineIssueLinks
     end
   end
 end
-
-ProjectsHelper.send(:include, RedmineIssueLinks::ProjectsHelperPatch) unless ProjectsHelper.included_modules.include? RedmineIssueLinks::ProjectsHelperPatch

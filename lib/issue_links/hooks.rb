@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with redmine_issue_links.  If not, see <http://www.gnu.org/licenses/>.
 
-module RedmineIssueLinks
+module IssueLinks
   class Hooks < Redmine::Hook::ViewListener
     render_on :view_issues_show_details_bottom,
                 :partial => 'issue_links_settings/issue_links'

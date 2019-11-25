@@ -15,13 +15,13 @@
 
 class IssueLink < ActiveRecord::Base
   unloadable
-  
+
   belongs_to :project
   belongs_to :tracker
   belongs_to :child_project, :class_name => 'Project'
   belongs_to :child_tracker, :class_name => 'Tracker'
 
-  acts_as_list
+  acts_as_positioned
 
   scope :sorted, lambda { order(:position) }
 end

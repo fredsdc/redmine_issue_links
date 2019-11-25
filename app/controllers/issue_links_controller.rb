@@ -16,7 +16,7 @@
 class IssueLinksController < ApplicationController
   unloadable
 
-  before_filter :find_project
+  before_action :find_project
 
   def issuelinksdata
     (render_403; return false) unless User.current.allowed_to?(:edit_project, @project)
@@ -31,7 +31,7 @@ class IssueLinksController < ApplicationController
       if link_id.nil?
         IssueLink.create(name: v["link_name"], project_id: @project.id, tracker_id: v["tracker_from"], child_project_id: @project.id, child_tracker_id: v["tracker_to"], cfs: cfs)
       else
-        IssueLink.update(IssueLink.find(link_id), name: v["link_name"], project_id: @project.id, tracker_id: v["tracker_from"], child_project_id: @project.id, child_tracker_id: v["tracker_to"], cfs: cfs)
+        IssueLink.update(IssueLink.find(link_id).id, name: v["link_name"], project_id: @project.id, tracker_id: v["tracker_from"], child_project_id: @project.id, child_tracker_id: v["tracker_to"], cfs: cfs)
       end
     end
     IssueLink.where(id: links_ids).destroy_all
