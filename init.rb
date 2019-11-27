@@ -24,7 +24,7 @@ Redmine::Plugin.register :redmine_issue_links do
 end
 
 Rails.configuration.to_prepare do
-  IssueLinks::ProjectsSettingsTabs.apply
+  ProjectsHelper.send :prepend, IssueLinks::ProjectsSettingsTabs
 end
 
 # Rails.application.config.to_prepare do

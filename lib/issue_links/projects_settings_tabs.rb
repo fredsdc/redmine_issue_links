@@ -15,10 +15,6 @@
 
 module IssueLinks
   module ProjectsSettingsTabs
-    def self.apply
-      ProjectsController.send :helper, IssueLinks::ProjectsSettingsTabs
-    end
-
     def project_settings_tabs
       tabs = super
       tabs << {

@@ -1,4 +1,4 @@
-class CreateIssueLinks < ActiveRecord::Migration
+class CreateIssueLinks < ActiveRecord::Migration[4.2]
   def change
     create_table :issue_links do |t|
       t.integer :project_id, :null => false
