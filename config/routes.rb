@@ -16,5 +16,6 @@
 # Plugin's routes
 # See: http://guides.rubyonrails.org/routing.html
 
-match 'projects/:id/issue_links', :controller => 'issue_links', :via => [:post], :action => 'issuelinksdata'
-match 'projects/:id/issue_links', :controller => 'issue_links', :via => [:get], :action => 'edit'
+post 'issue_links/get_tracker_options', :to =>'issue_links#get_tracker_options'
+post 'projects/:id/issue_links',        :to => 'issue_links#issue_links_data'
+get  'projects/:id/issue_links',        :to => 'issue_links#edit'

@@ -1,0 +1,1 @@
+$('#issue_links div:nth(<%= @issue_link_index %>) #tracker_to').html('<%= escape_javascript options_from_collection_for_select(@child_project.trackers.collect, "id", "name", @selected_tracker) %>');

@@ -20,8 +20,8 @@ module IssueLinks
       tabs << {
         :name => 'issue_links',
         :action => :issue_links,
-        :partial => 'issue_links_settings/form',
-        :label => :issue_links} if @project.module_enabled?(:issue_tracking) && @project.trackers.any? && User.current.allowed_to?(:edit_project, @project)
+        :partial => 'issue_links/form',
+        :label => :label_issue_links} if @project.module_enabled?(:issue_tracking) && @project.trackers.any? && User.current.allowed_to?(:edit_project, @project)
       tabs
     end
   end

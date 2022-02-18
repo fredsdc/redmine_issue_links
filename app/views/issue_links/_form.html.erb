@@ -1,0 +1,102 @@
+<%
+# This file is a part of Redmine Issue Link
+#
+# redmine_issue_links is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# redmine_issue_links is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with redmine_issue_links.  If not, see <http://www.gnu.org/licenses/>.
+-%>
+<div class='box'>
+  <div id="issue_links_label">
+    <label style="display: inline-block; width: 200px"><%= l(:label_link_name) %>:</label>
+    <label style="display: inline-block; width: 200px"><%= l(:label_issue_from) %>:</label>
+    <label style="display: inline-block; width: 200px"><%= l(:label_project_to) %>:</label>
+    <label style="display: inline-block; width: 200px"><%= l(:label_issue_to) %>:</label>
+  </div>
+  <div id="issue_links">
+    <% IssueLink.where(project: @project).each do |i| %>
+      <% if @project.trackers.include?(i.tracker) %>
+        <%= render :partial => 'issue_links/issue_link_item', :locals => {:i => i} %>
+      <% end %>
+    <% end %>
+  </div>
+  <%= link_to l(:label_issue_link_new), "", :class => 'icon icon-add', :onclick => 'add_issue_link(); return false;' %>
+</div>
+<div id="dialog" style="display:none;">
+  <h3 class="title"><%= l(:label_copy_cfs) %></h3>
+</div>
+
+<%= form_for :issue_links, :url => {:controller=>'issue_links', :action => 'issue_links_data', :id => @project},
+  :html => {:id => 'issue_links_data_form', :method => :post} do |f| %>
+<%= hidden_field :issue_links_data, '', :id => 'issue_links_data', :name => 'issue_links_data' %>
+<p><%= submit_tag l(:button_save), :onclick => "issue_links_json_data();" %></p>
+<% end %>
+
+<%= javascript_tag do %>
+  $('.sortable_links').sortable({
+    items: 'div.sortable_link',
+    start: function(event, ui) {
+      ui.placeholder.height(ui.item.height());
+    },
+    axis: 'y'
+  });
+  show_issue_links_label();
+
+  function send_cfs(button) {
+    cfs_tag = $(button).parent().children('#cfs');
+    dataset = {
+      tracker_from: $(button).parent().children('#tracker_from').val(),
+      project_to: $(button).parent().children('#project_to').val(),
+      tracker_to: $(button).parent().children('#tracker_to').val(),
+      cfs: $(cfs_tag).val()
+    };
+    htmldata = $.get('<%= url_for :controller => 'issue_links', :action => 'issue_links_data', :id => @project %>', dataset).done(function(){$('#dialog').html(htmldata.responseText)});
+    showModal('dialog', '600px');
+  }
+
+  function issue_links_json_data() {
+    var r = {}, i=0
+    $('#issue_links').children('div').each(function () {
+      if ($(this).children('#link_name').val() != "") {
+        r[i++] = {
+          'link_name': $(this).children('#link_name').val(),
+          'tracker_from': $(this).children('#tracker_from').val(),
+          'project_to': $(this).children('#project_to').val(),
+          'tracker_to': $(this).children('#tracker_to').val(),
+          'cfs': $(this).children('#cfs').val()
+        }
+      }
+    });
+    console.log(r);
+    $('#issue_links_data').val(JSON.stringify(r));
+  }
+
+  function add_issue_link() {
+    $("<%= escape_javascript render :partial => 'issue_links/issue_link_item', :locals => {:i => IssueLink.new(project: @project, child_project: @project)} %>").appendTo('#issue_links');
+    show_issue_links_label();
+  }
+
+  function show_issue_links_label() {
+    if ($('#issue_links').children().size() == 0){
+      $('#issue_links_label').hide();
+    }else{
+      $('#issue_links_label').show();
+    }
+  }
+
+  function refresh_trackers(el) {
+    return $.ajax({
+      url: '<%= escape_javascript url_for(:controller => 'issue_links', :action => 'get_tracker_options', :id => @project, :format => 'js') %>',
+      type: 'post',
+      data: {'child_project_id': $(el).val(), 'child_tracker_id': $(el).next().val(), 'issue_link_index': $(el).closest('div').index()}
+    });
+  }
+<% end %>

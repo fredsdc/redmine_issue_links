@@ -1,7 +1,9 @@
 # Brazillian portuguese strings go here for Rails i18n
 pt-BR:
-  issue_links: "Links de Tarefa"
-  link_name: "Nome do link"
-  issue_from: "Tipo de Tarefa de origem"
-  issue_to: "Tipo de Tarefa de destino"
-  copy_cfs: "Copiar campos"
+  label_issue_links: "Links de Tarefa"
+  label_link_name: "Nome do link"
+  label_issue_from: "Tipo de Tarefa de origem"
+  label_project_to: "Projeto de destino"
+  label_issue_to: "Tipo de Tarefa de destino"
+  label_copy_cfs: "Copiar campos"
+  label_issue_link_new: "Aicionar link de tarefa"

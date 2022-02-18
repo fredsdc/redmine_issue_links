@@ -1,6 +1,6 @@
-<h3 class="title"><%= l(:copy_cfs) %></h3>
+<h3 class="title"><%= l(:label_copy_cfs) %></h3>
 
-<%= form_for :issue_links, :as => :issue_links, :url => {:controller=>'issue_links', :action => 'issuelinksdata', :id => @project}, :remote => true, :method => :post do |f| %>
+<%= form_for :issue_links, :as => :issue_links, :url => {:controller=>'issue_links', :action => 'issue_links_data', :id => @project}, :remote => true, :method => :post do |f| %>
   <fieldset class="box tabular"><legend><%= l(:label_custom_field_plural) %></legend>
     <% @common_custom_fields.each do |cf| %>
       <label class="floating">

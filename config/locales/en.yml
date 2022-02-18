@@ -1,7 +1,9 @@
 # English strings go here for Rails i18n
 en:
-  issue_links: "Issue Links"
-  link_name: "Link name"
-  issue_from: "Tracker from"
-  issue_to: "Tracker to"
-  copy_cfs: "Copy fields"
+  label_issue_links: "Issue Links"
+  label_link_name: "Link name"
+  label_issue_from: "Tracker from"
+  label_project_to: "Project to"
+  label_issue_to: "Tracker to"
+  label_copy_cfs: "Copy fields"
+  label_issue_link_new: "Add issue link"

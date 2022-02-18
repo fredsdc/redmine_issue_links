@@ -16,6 +16,6 @@
 module IssueLinks
   class Hooks < Redmine::Hook::ViewListener
     render_on :view_issues_show_details_bottom,
-                :partial => 'issue_links_settings/issue_links'
+                :partial => 'issue_links/issue_links'
   end
 end
