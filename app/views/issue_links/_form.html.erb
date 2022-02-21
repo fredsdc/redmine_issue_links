@@ -58,8 +58,7 @@
       tracker_to: $(button).parent().children('#tracker_to').val(),
       cfs: $(cfs_tag).val()
     };
-    htmldata = $.get('<%= url_for :controller => 'issue_links', :action => 'issue_links_data', :id => @project %>', dataset).done(function(){$('#dialog').html(htmldata.responseText)});
-    showModal('dialog', '600px');
+    htmldata = $.get('<%= url_for :controller => 'issue_links', :action => 'issue_links_data', :id => @project %>', dataset).done(function(){$('#dialog').html(htmldata.responseText);showModal('dialog', '600px')});
   }
 
   function issue_links_json_data() {

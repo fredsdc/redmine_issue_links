@@ -27,7 +27,7 @@ class IssueLinksController < ApplicationController
     issue_links_data.each do |i,v|
       link_id = links_ids.shift
       cfs = (common_custom_fields(v["tracker_from"], v["tracker_to"], v["project_to"]).map(&:first) &
-        v["cfs"].split(",").map(&:to_i)).join(",")
+        v["cfs"].split(",")).join(",")
       if link_id.nil?
         IssueLink.create(name: v["link_name"], project_id: @project.id, tracker_id: v["tracker_from"], child_project_id:v["project_to"], child_tracker_id: v["tracker_to"], cfs: cfs)
       else
@@ -48,7 +48,7 @@ class IssueLinksController < ApplicationController
   def edit
     (render_403; return false) unless User.current.allowed_to?(:edit_project, @project)
     @common_custom_fields = common_custom_fields(params[:tracker_from], params[:tracker_to], params[:project_to])
-    @selected_common_fields = CustomField.where(id: params[:cfs].split(",")).pluck(:id, :name)
+    @selected_common_fields = params[:cfs].split(",")
     render :partial => 'edit'
   end
 
@@ -56,10 +56,12 @@ private
 
   def common_custom_fields(tracker_from, tracker_to, project_to)
     if @project && tracker_from && tracker_to && project_to
-      @project.all_issue_custom_fields.pluck(:id, :name) &
-        Tracker.find_by_id(tracker_from).custom_fields.pluck(:id, :name) &
-        Tracker.find_by_id(tracker_to).custom_fields.pluck(:id, :name) &
-        Project.find_by_id(project_to).all_issue_custom_fields.pluck(:id, :name)
+      (["subject"] | Tracker.find_by_id(tracker_from).core_fields & Tracker.find_by_id(tracker_to).core_fields - ["parent_issue_id"]).
+        map{|t| [t, l("field_#{t}".sub(/_id$/, ''))]} | (
+          @project.all_issue_custom_fields.pluck(:id, :name) &
+          Tracker.find_by_id(tracker_from).custom_fields.pluck(:id, :name) &
+          Tracker.find_by_id(tracker_to).custom_fields.pluck(:id, :name) &
+          Project.find_by_id(project_to).all_issue_custom_fields.pluck(:id, :name)).map{|c| [c[0].to_s, c[1]]}
     else
       []
     end

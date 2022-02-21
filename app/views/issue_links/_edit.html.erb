@@ -1,16 +1,26 @@
 <h3 class="title"><%= l(:label_copy_cfs) %></h3>
 
 <%= form_for :issue_links, :as => :issue_links, :url => {:controller=>'issue_links', :action => 'issue_links_data', :id => @project}, :remote => true, :method => :post do |f| %>
-  <fieldset class="box tabular"><legend><%= l(:label_custom_field_plural) %></legend>
-    <% @common_custom_fields.each do |cf| %>
+  <fieldset class="box tabular"><legend><%= l(:field_core_fields) %></legend>
+    <% @common_custom_fields.select{|cf| ! cf[0].match?(/^\d*$/)}.each do |cf| %>
       <label class="floating">
-      <%= check_box_tag "cf", cf[0], (@selected_common_fields.include? cf),
+      <%= check_box_tag "cf", cf[0], (@selected_common_fields.include? cf[0]),
           :disabled => nil, :id => nil %>
       <%= cf[1] %>
       </label>
     <% end %>
   </fieldset>
-
+  <% if @common_custom_fields.select{|cf| cf[0].match?(/^\d*$/)}.any? %>
+    <fieldset class="box tabular"><legend><%= l(:label_custom_field_plural) %></legend>
+      <% @common_custom_fields.select{|cf| cf[0].match?(/^\d*$/)}.each do |cf| %>
+        <label class="floating">
+        <%= check_box_tag "cf", cf[0], (@selected_common_fields.include? cf[0]),
+            :disabled => nil, :id => nil %>
+        <%= cf[1] %>
+        </label>
+      <% end %>
+    </fieldset>
+  <% end %>
   <p class="buttons">
     <%= submit_tag l(:button_add), :name => nil, :onclick => "$(cfs_tag).val($('#dialog label input:checkbox:checked').map(function(){return this.value}).get().toString()); hideModal(this);", :type => 'button' %>
     <%= submit_tag l(:button_cancel), :name => nil, :onclick => "hideModal(this);", :type => 'button' %>
