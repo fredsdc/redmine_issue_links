@@ -2,12 +2,16 @@
 
 This plugin adds a link left of the other issue links (Edit, Copy), that creates a subtask of a specific tracker.
 
-It adds shortcuts for when your users don't know how Redmine works.
+It can create a subtask on another project.
+
+Project managers can set which standard fields and custom fields to copy from the parent issue.
 
 == How to use
 
 Members with permission to edit the project would find in settings a new tab "Issue Links".
 
-Fill a name for the link, and the trackers (parent and child) that the plugin would use.
+Add a new issue link, fill a name, select trackers which to assign the link, select destiny project and tracker.
+
+Click on "Copy fields" button to select which fields to copy.
 
 Save.
