@@ -21,6 +21,7 @@ Redmine::Plugin.register :redmine_issue_links do
   description 'This plugin configure custom links on the issue view to shortcut new subtasks'
   version '1.1.0'
   url 'http://github.com/fredsdc/redmine_issue_links'
+  author_url 'https://github.com/fredsdc'
 end
 
 Rails.configuration.to_prepare do
