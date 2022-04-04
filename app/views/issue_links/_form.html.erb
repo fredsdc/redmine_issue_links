@@ -91,7 +91,7 @@
     }
   }
 
-  function refresh_trackers(el) {
+  function refresh_issue_link_trackers(el) {
     return $.ajax({
       url: '<%= escape_javascript url_for(:controller => 'issue_links', :action => 'get_tracker_options', :id => @project, :format => 'js') %>',
       type: 'post',

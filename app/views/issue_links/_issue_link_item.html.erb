@@ -6,7 +6,7 @@
     {:style => "width: 200px"} %>
   <%= select_tag "project_to",
     project_tree_options_for_select(Project.all.active, :selected => i.child_project),
-    {:onchange => "refresh_trackers(this);", :style => "width: 200px"} %>
+    {:onchange => "refresh_issue_link_trackers(this);", :style => "width: 200px"} %>
   <%= select_tag "tracker_to",
     options_from_collection_for_select(i.child_project.trackers.collect, "id", "name", i.child_tracker_id),
     {:style => "width: 200px"} %>
